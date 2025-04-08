@@ -9,10 +9,10 @@ namespace GameZone.Data
         {
 
         }
-        DbSet<Game> Games { get; set; }
-        DbSet<Category> Categories { get; set; }
-        DbSet<Device> Devices { get; set; }
-        DbSet<GameDevice> GameDevices { get; set; }
+        public DbSet<Game> Games { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Device> Devices { get; set; }
+        public DbSet<GameDevice> GameDevices { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GameDevice>()
