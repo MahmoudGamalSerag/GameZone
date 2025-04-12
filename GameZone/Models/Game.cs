@@ -1,4 +1,6 @@
-﻿namespace GameZone.Models
+﻿
+
+namespace GameZone.Models
 {
     public class Game:BaseEntity
     {
@@ -11,5 +13,7 @@
         public Category Category { get; set; } = default!;
 
         public ICollection<GameDevice> Devices { get; set; } = new List<GameDevice>();
+
+        
     }
 }
