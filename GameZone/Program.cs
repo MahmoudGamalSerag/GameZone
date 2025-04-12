@@ -6,9 +6,13 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
     throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<ICategoriesServices, CategoriesServices>();
+builder.Services.AddScoped<IDevicesServices, DevicesServices>();
+builder.Services.AddScoped<IGamesServices, GamesServices>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
