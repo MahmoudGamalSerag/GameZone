@@ -16,7 +16,7 @@ namespace GameZone.Controllers
             _DevicesServices = devicesServices;
             _GamesServices = gamesServices;
         }
-
+        
         public IActionResult Index()
         {
             var games = _GamesServices.GetAll();
@@ -44,6 +44,69 @@ namespace GameZone.Controllers
             }
             await _GamesServices.addGame(model);
             return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Details(int id)
+        {
+            var game = _GamesServices.GetGameById(id);
+            if (game is null)
+            {
+                return NotFound();
+            }
+            return View(game);
+        }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var game = _GamesServices.GetGameById(id);
+            if (game is null)
+            {
+                return NotFound();
+            }
+            EditGameFormViewModel ViewModel = new EditGameFormViewModel
+            {
+                Id = game.Id,
+                Name = game.Name,
+                Description = game.Description,
+                CategoryId = game.CategoryId,
+                SelectedDevices = game.Devices.Select(d => d.DeviceId).ToList(),
+                Categories = _CategoryServices.GetCategories(),
+                Devices = _DevicesServices.GetDevices(),
+                OldCover = game.Cover,
+            };
+            return View(ViewModel);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditGameFormViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Categories = _CategoryServices.GetCategories();
+                model.Devices = _DevicesServices.GetDevices();
+                return View(model);
+            }
+            var game = await _GamesServices.Edit(model);
+            if (game is null)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+        
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            var isDeleted = _GamesServices.Delete(id);
+            if (isDeleted)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }
